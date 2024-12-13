@@ -1,0 +1,18 @@
+trigger:
+- main
+
+pool:
+  vmImage: ubuntu-latest
+
+steps:
+- script: |
+    for version in 3.8 3.9 3.10 3.11; do
+      echo "Setting up Python $version"
+      echo "##[group]Test Python $version"
+      python -m pip install --upgrade pip
+      python -m pip install -r requirements.txt
+      python -m pip install pytest pytest-azurepipelines
+      pytest
+      echo "##[endgroup]"
+    done
+  displayName: 'Test all Python versions sequentially'
